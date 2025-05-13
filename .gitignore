@@ -1,5 +1,6 @@
 # Rider / IntelliJ project settings
 .idea/
+/kol1Oficial/kol1Oficial/obj/
 
 # Build directories
 bin/
