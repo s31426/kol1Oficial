@@ -10,3 +10,5 @@ var host = builder.Build();
 host.MapControllers();
 
 host.Run();
+
+//https://bss.pja.edu.pl/docs/students/linux/mssql_datagrip/
