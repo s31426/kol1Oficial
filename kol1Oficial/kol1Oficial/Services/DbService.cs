@@ -1,3 +1,4 @@
+using System.Data.Common;
 using System.Runtime.InteropServices.JavaScript;
 using kol1Oficial.DTOs;
 using kol1Oficial.Exceptions;
@@ -77,5 +78,72 @@ public class DbService:IDbService
 
         }
         return wholedel;
+        
+    }
+
+    public async Task PostDelivery(PostDelivery delivery)
+    {
+        await using SqlConnection connection = new SqlConnection(_connectionString);
+        await using SqlCommand command = new SqlCommand();
+        
+        command.Connection = connection;
+        await connection.OpenAsync();
+        
+        DbTransaction transaction = await connection.BeginTransactionAsync();
+        command.Transaction = transaction as SqlTransaction;
+
+        try
+        {
+            command.Parameters.Clear();
+            command.CommandText = "SELECT 1 FROM Delivery WHERE delivery_id = @delivery_id;";
+            command.Parameters.AddWithValue("@delivery_id", delivery.deliveryId);
+            var deliveryIdRes = await command.ExecuteScalarAsync();
+            if (deliveryIdRes is not null)
+            {
+                throw new NotFoundException("Delivery already exists");
+            }
+
+            command.Parameters.Clear();
+            command.CommandText = "SELECT 1 FROM Customer WHERE customer_id = @customer_id;";
+            command.Parameters.AddWithValue("@customer_id", delivery.customerId);
+            var deliveryCustomerRes = await command.ExecuteScalarAsync();
+            if (deliveryIdRes is null)
+            {
+                throw new NotFoundException("Customer doesnt exists");
+            }
+
+            command.Parameters.Clear();
+            command.CommandText = "SELECT 1 FROM Driver WHERE licence_number = @licence_number;";
+            command.Parameters.AddWithValue("@licence_number", delivery.licenceNumber);
+            var deliveryLicence = await command.ExecuteScalarAsync();
+            if (deliveryLicence is null)
+            {
+                throw new NotFoundException("Driver doesnt exists");
+            }
+
+            foreach (var product in delivery.posts)
+            {
+                command.Parameters.Clear();
+                command.CommandText = "SELECT 1 FROM Product WHERE name = @name;";
+                command.Parameters.AddWithValue("@name", product.name);
+                var productname = await command.ExecuteScalarAsync();
+                if (productname is null)
+                {
+                    throw new NotFoundException("Product doesnt exists");
+                }
+            }
+
+            var query = @"Select driver_id From Driver Where licence_number = @licence_number";
+            command.Parameters.Clear();
+            command.CommandText =
+                @"INSERT INTO Delivery
+            VALUES(@delivery_id, @customer_id, @ReturnDate, @CustomerId, @StatusId);";
+
+        }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+        }
+        
     }
 }
