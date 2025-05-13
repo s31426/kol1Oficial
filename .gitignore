@@ -1,1 +1,73 @@
+# Rider / IntelliJ project settings
 .idea/
+
+# Build directories
+bin/
+obj/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Rider-specific
+.idea/
+*.sln.iml
+
+# ASP.NET Core logs
+logs/
+*.log
+
+# Paket dependency manager
+.paket/
+paket-files/
+
+# Backup & temp files
+*.tmp
+*.bak
+*.old
+*.orig
+
+# DotCover coverage results
+*.dotCover
+
+# Visual Studio Code settings
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Resharper / Rider caches (if any)
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# JetBrains caches
+.idea/.idea.*
+.idea/.cache/
+.idea/.gradle/
+
+# Local database
+*.mdf
+*.ldf
+
+# Entity Framework Migrations metadata
+Migrations/
+
+# Test results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
